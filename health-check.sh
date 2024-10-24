@@ -34,7 +34,7 @@ do
 
   for i in 1 2 3 4; 
   do
-    response=$(curl --write-out '%{http_code}' --silent --output /dev/null $url)
+    response=$(curl --connect-timeout 30 --max-time 180 --write-out '%{http_code}' --silent --output /dev/null $url)
     if [ "$response" -eq 200 ] || [ "$response" -eq 202 ] || [ "$response" -eq 301 ] || [ "$response" -eq 302 ] || [ "$response" -eq 307 ]; then
       result="success"
     else
@@ -45,7 +45,7 @@ do
     fi
     sleep 5
   done
-  echo "  Result: $result"
+  echo "  Result: $result , response: $response"
   dateTime=$(date +'%Y-%m-%d %H:%M')
   if [[ $commit == true ]]
   then
